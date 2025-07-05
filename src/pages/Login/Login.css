@@ -24,21 +24,21 @@
   width: 100%;
   height: 100%;
   z-index: -2;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #ff6b6b 100%);
-  background-size: 400% 400%;
-  animation: gradientMove 8s ease infinite;
-}
-
-@keyframes gradientMove {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  background: #1a1a1a; /* Dark fallback instead of gradient */
 }
 
 .bg-video {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: opacity 0.5s ease;
+}
+
+.bg-video.loading {
+  opacity: 0;
+}
+
+.bg-video.loaded {
   opacity: 1;
 }
 
@@ -57,8 +57,8 @@
   position: absolute;
   top: 20px;
   right: 20px;
-  width: 60px;
-  height: 60px;
+  width: 45px;
+  height: 45px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(10px);
@@ -70,36 +70,59 @@
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 10;
   box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.3),
+    0 4px 16px rgba(0, 0, 0, 0.2),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .video-control-btn:hover {
   background: rgba(255, 255, 255, 0.25);
-  transform: scale(1.1);
+  transform: scale(1.08);
   box-shadow: 
-    0 12px 40px rgba(0, 0, 0, 0.4),
-    0 0 20px rgba(255, 255, 255, 0.3),
+    0 6px 20px rgba(0, 0, 0, 0.3),
+    0 0 15px rgba(255, 255, 255, 0.2),
     inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
 .video-control-btn:active {
-  transform: scale(1.05);
+  transform: scale(1.02);
 }
 
 .control-icon {
   color: white;
-  width: 24px;
-  height: 24px;
+  width: 16px;
+  height: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+  transition: transform 0.2s ease;
 }
 
 .control-icon svg {
   width: 100%;
   height: 100%;
+  transition: all 0.2s ease;
+}
+
+/* Play/Pause Animation */
+.control-icon.playing svg {
+  animation: pauseRotate 0.3s ease;
+}
+
+.control-icon.paused svg {
+  animation: playScale 0.3s ease;
+}
+
+@keyframes pauseRotate {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.1); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+@keyframes playScale {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
 }
 
 

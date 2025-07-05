@@ -6,6 +6,8 @@ const Login = () => {
   const [selectedFeature, setSelectedFeature] = useState(null);
   const [hoveredFeature, setHoveredFeature] = useState(null);
   const [isVideoPlaying, setIsVideoPlaying] = useState(true);
+  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+  const [animationClass, setAnimationClass] = useState('');
   const videoRef = useRef(null);
   const navigate = useNavigate();
 
@@ -37,11 +39,17 @@ const Login = () => {
   const toggleVideoPlayback = () => {
     if (videoRef.current) {
       if (isVideoPlaying) {
+        // Pause animation
+        setAnimationClass('playing');
         videoRef.current.pause();
         setIsVideoPlaying(false);
+        setTimeout(() => setAnimationClass(''), 300);
       } else {
+        // Play animation
+        setAnimationClass('paused');
         videoRef.current.play().catch(console.error);
         setIsVideoPlaying(true);
+        setTimeout(() => setAnimationClass(''), 300);
       }
     }
   };
@@ -113,11 +121,19 @@ const Login = () => {
           muted 
           loop 
           playsInline
-          preload="auto"
-          className="bg-video"
-          onLoadedData={() => {
+          preload="metadata"
+          className={`bg-video ${isVideoLoaded ? 'loaded' : 'loading'}`}
+          onLoadedMetadata={() => {
+            setIsVideoLoaded(true);
+          }}
+          onCanPlayThrough={() => {
             if (videoRef.current) {
               videoRef.current.play().catch(console.error);
+            }
+          }}
+          onCanPlay={() => {
+            if (videoRef.current && !isVideoPlaying) {
+              videoRef.current.pause();
             }
           }}
         >
@@ -133,16 +149,16 @@ const Login = () => {
           onClick={toggleVideoPlayback}
           aria-label={isVideoPlaying ? 'Pause video' : 'Play video'}
         >
-          <div className="control-icon">
+          <div className={`control-icon ${animationClass}`}>
             {isVideoPlaying ? (
               // Pause icon
-              <svg viewBox="0 0 24 24" width="24" height="24">
+              <svg viewBox="0 0 24 24" width="16" height="16">
                 <rect x="6" y="4" width="4" height="16" fill="currentColor" />
                 <rect x="14" y="4" width="4" height="16" fill="currentColor" />
               </svg>
             ) : (
               // Play icon
-              <svg viewBox="0 0 24 24" width="24" height="24">
+              <svg viewBox="0 0 24 24" width="16" height="16">
                 <polygon points="5,3 19,12 5,21" fill="currentColor" />
               </svg>
             )}
