@@ -5,6 +5,7 @@ import './App.css';
 // Import pages
 import Login from './pages/Login/Login';
 import Dashboard from './pages/Dashboard/Dashboard';
+import Callback from './pages/Callback/Callback';
 import MoodTracking from './pages/MoodTracking/MoodTracking';
 import MusicRecommendations from './pages/MusicRecommendations/MusicRecommendations';
 
@@ -15,6 +16,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/callback" element={<Callback />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/mood-tracking" element={<MoodTracking />} />
           <Route path="/music-recommendations" element={<MusicRecommendations />} />
