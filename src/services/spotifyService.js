@@ -30,6 +30,12 @@ class SpotifyService {
     const state = this.generateRandomString(16);
     localStorage.setItem('spotify_auth_state', state);
     
+    // Debug logging
+    console.log('Spotify Auth Debug Info:');
+    console.log('Client ID:', this.clientId);
+    console.log('Redirect URI:', this.redirectUri);
+    console.log('State:', state);
+    
     const params = new URLSearchParams({
       response_type: 'code',
       client_id: this.clientId,
@@ -39,7 +45,10 @@ class SpotifyService {
       show_dialog: true
     });
 
-    return `https://accounts.spotify.com/authorize?${params.toString()}`;
+    const authUrl = `https://accounts.spotify.com/authorize?${params.toString()}`;
+    console.log('Generated Auth URL:', authUrl);
+    
+    return authUrl;
   }
 
   // Generate random string for state parameter
