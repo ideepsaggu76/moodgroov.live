@@ -5,8 +5,8 @@ const Debug = () => {
   const [authUrl, setAuthUrl] = useState('');
   const [envVars, setEnvVars] = useState({});
 
-  const generateUrl = () => {
-    const url = spotifyService.getAuthUrl();
+  const generateUrl = async () => {
+    const url = await spotifyService.getAuthUrl();
     setAuthUrl(url);
     
     setEnvVars({

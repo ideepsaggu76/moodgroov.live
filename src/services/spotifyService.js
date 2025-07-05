@@ -5,7 +5,6 @@ const spotifyApi = new SpotifyWebApi();
 class SpotifyService {
   constructor() {
     this.clientId = process.env.REACT_APP_SPOTIFY_CLIENT_ID;
-    this.clientSecret = process.env.REACT_APP_SPOTIFY_CLIENT_SECRET;
     this.redirectUri = process.env.REACT_APP_SPOTIFY_REDIRECT_URI;
     this.scopes = [
       'user-read-private',
@@ -25,16 +24,44 @@ class SpotifyService {
     ];
   }
 
-  // Generate Spotify authorization URL
-  getAuthUrl() {
+  // Generate code verifier for PKCE
+  generateCodeVerifier() {
+    const array = new Uint8Array(32);
+    crypto.getRandomValues(array);
+    return btoa(String.fromCharCode.apply(null, array))
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=/g, '');
+  }
+
+  // Generate code challenge for PKCE
+  async generateCodeChallenge(verifier) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(verifier);
+    const digest = await crypto.subtle.digest('SHA-256', data);
+    return btoa(String.fromCharCode.apply(null, new Uint8Array(digest)))
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=/g, '');
+  }
+
+  // Generate Spotify authorization URL with PKCE
+  async getAuthUrl() {
     const state = this.generateRandomString(16);
+    const codeVerifier = this.generateCodeVerifier();
+    const codeChallenge = await this.generateCodeChallenge(codeVerifier);
+    
+    // Store for later use
     localStorage.setItem('spotify_auth_state', state);
+    localStorage.setItem('spotify_code_verifier', codeVerifier);
     
     // Debug logging
     console.log('Spotify Auth Debug Info:');
     console.log('Client ID:', this.clientId);
     console.log('Redirect URI:', this.redirectUri);
     console.log('State:', state);
+    console.log('Code Verifier:', codeVerifier);
+    console.log('Code Challenge:', codeChallenge);
     
     const params = new URLSearchParams({
       response_type: 'code',
@@ -42,6 +69,8 @@ class SpotifyService {
       scope: this.scopes.join(' '),
       redirect_uri: this.redirectUri,
       state: state,
+      code_challenge_method: 'S256',
+      code_challenge: codeChallenge,
       show_dialog: true
     });
 
@@ -61,29 +90,37 @@ class SpotifyService {
     return result;
   }
 
-  // Exchange authorization code for access token
+  // Exchange authorization code for access token using PKCE
   async getAccessToken(code, state) {
     const storedState = localStorage.getItem('spotify_auth_state');
+    const codeVerifier = localStorage.getItem('spotify_code_verifier');
     
     if (state !== storedState) {
       throw new Error('State mismatch');
     }
 
+    if (!codeVerifier) {
+      throw new Error('No code verifier found');
+    }
+
     const response = await fetch('https://accounts.spotify.com/api/token', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Authorization': 'Basic ' + btoa(this.clientId + ':' + this.clientSecret)
+        'Content-Type': 'application/x-www-form-urlencoded'
       },
       body: new URLSearchParams({
         grant_type: 'authorization_code',
         code: code,
-        redirect_uri: this.redirectUri
+        redirect_uri: this.redirectUri,
+        client_id: this.clientId,
+        code_verifier: codeVerifier
       })
     });
 
     if (!response.ok) {
-      throw new Error('Failed to get access token');
+      const errorData = await response.text();
+      console.error('Token exchange failed:', errorData);
+      throw new Error(`Failed to get access token: ${response.status} ${response.statusText}`);
     }
 
     const data = await response.json();
@@ -92,6 +129,10 @@ class SpotifyService {
     localStorage.setItem('spotify_access_token', data.access_token);
     localStorage.setItem('spotify_refresh_token', data.refresh_token);
     localStorage.setItem('spotify_token_expires', Date.now() + (data.expires_in * 1000));
+    
+    // Clean up PKCE data
+    localStorage.removeItem('spotify_code_verifier');
+    localStorage.removeItem('spotify_auth_state');
     
     // Set access token for spotify API
     spotifyApi.setAccessToken(data.access_token);
@@ -110,17 +151,19 @@ class SpotifyService {
     const response = await fetch('https://accounts.spotify.com/api/token', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Authorization': 'Basic ' + btoa(this.clientId + ':' + this.clientSecret)
+        'Content-Type': 'application/x-www-form-urlencoded'
       },
       body: new URLSearchParams({
         grant_type: 'refresh_token',
-        refresh_token: refreshToken
+        refresh_token: refreshToken,
+        client_id: this.clientId
       })
     });
 
     if (!response.ok) {
-      throw new Error('Failed to refresh access token');
+      const errorData = await response.text();
+      console.error('Token refresh failed:', errorData);
+      throw new Error(`Failed to refresh access token: ${response.status} ${response.statusText}`);
     }
 
     const data = await response.json();
