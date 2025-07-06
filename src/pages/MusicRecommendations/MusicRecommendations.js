@@ -45,7 +45,7 @@ const MusicRecommendations = () => {
     <div className="music-recommendations-container">
       <header className="music-header">
         <button onClick={() => navigate('/dashboard')} className="back-btn">
-          ← Back to Dashboard
+          ← Back to Hi Page
         </button>
         <h1>Music Recommendations</h1>
       </header>

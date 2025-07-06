@@ -30,7 +30,7 @@ const MoodTracking = () => {
     <div className="mood-tracking-container">
       <header className="mood-header">
         <button onClick={() => navigate('/dashboard')} className="back-btn">
-          ← Back to Dashboard
+          ← Back to Hi Page
         </button>
         <h1>Track Your Mood</h1>
       </header>

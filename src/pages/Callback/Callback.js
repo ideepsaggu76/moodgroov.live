@@ -32,7 +32,7 @@ const Callback = () => {
         const user = await spotifyService.getCurrentUser();
         console.log('User authenticated:', user);
 
-        // Redirect to dashboard
+        // Redirect to hi page
         navigate('/dashboard');
       } catch (err) {
         console.error('Authentication error:', err);
