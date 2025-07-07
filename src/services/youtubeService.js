@@ -49,6 +49,14 @@ class YouTubeService {
   // Search for music specifically
   async searchMusic(query, maxResults = 20) {
     try {
+      if (!this.isApiKeyAvailable()) {
+        console.warn('YouTube API key not found. Using mock data.');
+        const mockData = this.getMockVideoData();
+        return {
+          items: mockData.slice(0, maxResults)
+        };
+      }
+
       const response = await axios.get(`${this.baseUrl}/search`, {
         params: {
           part: 'snippet',
@@ -167,6 +175,14 @@ class YouTubeService {
   // Get trending music videos
   async getTrendingMusic(maxResults = 20) {
     try {
+      if (!this.isApiKeyAvailable()) {
+        console.warn('YouTube API key not found. Using mock data.');
+        const mockData = this.getMockVideoData();
+        return {
+          items: mockData.slice(0, maxResults)
+        };
+      }
+
       const response = await axios.get(`${this.baseUrl}/videos`, {
         params: {
           part: 'snippet,statistics,contentDetails',
