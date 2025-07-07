@@ -23,4 +23,17 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# vercel
 .vercel
+
+# IDE
+.vscode
+.idea
+
+# OS
+Thumbs.db
+*.swp
+*.swo
+
+# Logs
+*.log

@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
 import './Login.css';
 import spotifyService from '../../services/spotifyService';
 
@@ -10,7 +9,7 @@ const Login = () => {
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
   const [animationClass, setAnimationClass] = useState('');
   const videoRef = useRef(null);
-  const navigate = useNavigate();
+  // const navigate = useNavigate(); // Not used currently
 
   const features = [
     {
@@ -38,20 +37,25 @@ const Login = () => {
 
   // Video control functions
   const toggleVideoPlayback = () => {
+    console.log('Video control button clicked!', { isVideoPlaying, videoRef: videoRef.current });
     if (videoRef.current) {
       if (isVideoPlaying) {
         // Pause video
         setAnimationClass('paused');
         videoRef.current.pause();
         setIsVideoPlaying(false);
+        console.log('Video paused');
         setTimeout(() => setAnimationClass(''), 300);
       } else {
         // Play video
         setAnimationClass('playing');
         videoRef.current.play().catch(console.error);
         setIsVideoPlaying(true);
+        console.log('Video playing');
         setTimeout(() => setAnimationClass(''), 300);
       }
+    } else {
+      console.log('Video ref not available');
     }
   };
 
@@ -59,6 +63,7 @@ const Login = () => {
     // Ensure video plays when component mounts
     if (videoRef.current) {
       videoRef.current.play().catch(console.error);
+      setIsVideoPlaying(true);
     }
   }, []);
 
@@ -128,14 +133,16 @@ const Login = () => {
             setIsVideoLoaded(true);
           }}
           onCanPlayThrough={() => {
-            if (videoRef.current) {
+            // Only auto-play if video is supposed to be playing
+            if (videoRef.current && isVideoPlaying) {
               videoRef.current.play().catch(console.error);
             }
           }}
-          onCanPlay={() => {
-            if (videoRef.current && !isVideoPlaying) {
-              videoRef.current.pause();
-            }
+          onPlay={() => {
+            setIsVideoPlaying(true);
+          }}
+          onPause={() => {
+            setIsVideoPlaying(false);
           }}
         >
           <source src="/background-video.mp4" type="video/mp4" />
@@ -143,29 +150,47 @@ const Login = () => {
           Your browser does not support the video tag.
         </video>
         <div className="video-overlay"></div>
-        
-        {/* Transparent Play/Pause Button */}
-        <button 
-          className="video-control-btn"
-          onClick={toggleVideoPlayback}
-          aria-label={isVideoPlaying ? 'Pause video' : 'Play video'}
-        >
-          <div className={`control-icon ${animationClass}`}>
-            {isVideoPlaying ? (
-              // Pause icon
-              <svg viewBox="0 0 24 24" width="20" height="20">
-                <rect x="6" y="4" width="4" height="16" fill="currentColor" />
-                <rect x="14" y="4" width="4" height="16" fill="currentColor" />
-              </svg>
-            ) : (
-              // Play icon
-              <svg viewBox="0 0 24 24" width="20" height="20">
-                <polygon points="5,3 19,12 5,21" fill="currentColor" />
-              </svg>
-            )}
-          </div>
-        </button>
       </div>
+
+      {/* Play/Pause Button - Outside video background */}
+      <button 
+        className="video-control-btn"
+        onClick={toggleVideoPlayback}
+        aria-label={isVideoPlaying ? 'Pause video' : 'Play video'}
+        style={{ 
+          position: 'fixed', 
+          top: '20px', 
+          right: '20px', 
+          zIndex: 9999,
+          cursor: 'pointer',
+          pointerEvents: 'auto',
+          width: '40px',
+          height: '40px',
+          borderRadius: '50%',
+          border: 'none',
+          background: 'rgba(255, 255, 255, 0.1)',
+          backdropFilter: 'blur(10px)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          transition: 'all 0.3s ease'
+        }}
+      >
+        <div className={`control-icon ${animationClass}`}>
+          {isVideoPlaying ? (
+            // Pause icon
+            <svg viewBox="0 0 24 24" width="12" height="12">
+              <rect x="6" y="4" width="4" height="16" fill="currentColor" />
+              <rect x="14" y="4" width="4" height="16" fill="currentColor" />
+            </svg>
+          ) : (
+            // Play icon
+            <svg viewBox="0 0 24 24" width="12" height="12">
+              <polygon points="5,3 19,12 5,21" fill="currentColor" />
+            </svg>
+          )}
+        </div>
+      </button>
 
       {/* Left Side - Logo */}
       <div className="left-section">

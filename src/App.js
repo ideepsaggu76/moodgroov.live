@@ -4,7 +4,7 @@ import './App.css';
 
 // Import pages
 import Login from './pages/Login/Login.js';
-import Hi from './pages/Hi/Hi.js';
+import DashboardNew from './pages/Dashboard/DashboardNew.js';
 import Callback from './pages/Callback/Callback.js';
 import Debug from './pages/Debug/Debug.js';
 import MoodTracking from './pages/MoodTracking/MoodTracking.js';
@@ -19,7 +19,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/callback" element={<Callback />} />
           <Route path="/debug" element={<Debug />} />
-          <Route path="/dashboard" element={<Hi />} />
+          <Route path="/dashboard" element={<DashboardNew />} />
           <Route path="/mood-tracking" element={<MoodTracking />} />
           <Route path="/music-recommendations" element={<MusicRecommendations />} />
         </Routes>

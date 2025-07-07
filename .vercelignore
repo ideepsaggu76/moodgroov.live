@@ -1,0 +1,36 @@
+# Development files
+src/
+public/
+node_modules/
+
+# Build artifacts
+*.map
+*.log
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Testing
+coverage/
+*.test.js
+*.spec.js
+
+# Documentation
+README.md
+*.md
+
+# Git
+.git/
+.gitignore
