@@ -6,9 +6,19 @@ class YouTubeService {
     this.baseUrl = 'https://www.googleapis.com/youtube/v3';
   }
 
+  // Check if API key is available
+  isApiKeyAvailable() {
+    return !!this.apiKey;
+  }
+
   // Search for videos
   async searchVideos(query, maxResults = 20) {
     try {
+      if (!this.isApiKeyAvailable()) {
+        console.warn('YouTube API key not found. Using mock data.');
+        return this.getMockVideoData();
+      }
+
       const response = await axios.get(`${this.baseUrl}/search`, {
         params: {
           part: 'snippet',
@@ -385,6 +395,92 @@ class YouTubeService {
     });
 
     return `https://www.youtube.com/embed/${videoId}?${params.toString()}`;
+  }
+
+  // Mock data for when API key is not available
+  getMockVideoData() {
+    const mockSongs = [
+      {
+        id: { videoId: 'dQw4w9WgXcQ' },
+        snippet: {
+          title: 'Sample Song 1 - Popular Hit',
+          channelTitle: 'Sample Artist',
+          description: 'A sample song for demo purposes',
+          thumbnails: {
+            medium: { url: 'https://via.placeholder.com/320x180/667eea/ffffff?text=Song+1' },
+            default: { url: 'https://via.placeholder.com/120x90/667eea/ffffff?text=Song+1' }
+          },
+          publishedAt: new Date().toISOString()
+        }
+      },
+      {
+        id: { videoId: 'L_jWHffIx5E' },
+        snippet: {
+          title: 'Sample Song 2 - Trending Now',
+          channelTitle: 'Demo Artist',
+          description: 'Another sample song for demo',
+          thumbnails: {
+            medium: { url: 'https://via.placeholder.com/320x180/764ba2/ffffff?text=Song+2' },
+            default: { url: 'https://via.placeholder.com/120x90/764ba2/ffffff?text=Song+2' }
+          },
+          publishedAt: new Date().toISOString()
+        }
+      },
+      {
+        id: { videoId: 'kJQP7kiw5Fk' },
+        snippet: {
+          title: 'Sample Song 3 - Chart Topper',
+          channelTitle: 'Music Demo',
+          description: 'Third sample song for the demo',
+          thumbnails: {
+            medium: { url: 'https://via.placeholder.com/320x180/ff6b6b/ffffff?text=Song+3' },
+            default: { url: 'https://via.placeholder.com/120x90/ff6b6b/ffffff?text=Song+3' }
+          },
+          publishedAt: new Date().toISOString()
+        }
+      },
+      {
+        id: { videoId: 'QH2-TGUlwu4' },
+        snippet: {
+          title: 'Sample Song 4 - Billboard Hit',
+          channelTitle: 'Sample Records',
+          description: 'Fourth sample song',
+          thumbnails: {
+            medium: { url: 'https://via.placeholder.com/320x180/4ecdc4/ffffff?text=Song+4' },
+            default: { url: 'https://via.placeholder.com/120x90/4ecdc4/ffffff?text=Song+4' }
+          },
+          publishedAt: new Date().toISOString()
+        }
+      },
+      {
+        id: { videoId: 'fJ9rUzIMcZQ' },
+        snippet: {
+          title: 'Sample Song 5 - Radio Favorite',
+          channelTitle: 'Demo Music Co',
+          description: 'Fifth sample song for demo',
+          thumbnails: {
+            medium: { url: 'https://via.placeholder.com/320x180/45b7d1/ffffff?text=Song+5' },
+            default: { url: 'https://via.placeholder.com/120x90/45b7d1/ffffff?text=Song+5' }
+          },
+          publishedAt: new Date().toISOString()
+        }
+      },
+      {
+        id: { videoId: 'M7lc1UVf-VE' },
+        snippet: {
+          title: 'Sample Song 6 - Top 40',
+          channelTitle: 'Sample Music Group',
+          description: 'Sixth sample song',
+          thumbnails: {
+            medium: { url: 'https://via.placeholder.com/320x180/96ceb4/ffffff?text=Song+6' },
+            default: { url: 'https://via.placeholder.com/120x90/96ceb4/ffffff?text=Song+6' }
+          },
+          publishedAt: new Date().toISOString()
+        }
+      }
+    ];
+
+    return { items: mockSongs };
   }
 }
 
