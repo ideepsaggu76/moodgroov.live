@@ -13,6 +13,7 @@ const Dashboard = () => {
   // Music State
   const [currentSong, setCurrentSong] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlayerLoading, setIsPlayerLoading] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(0.8);
@@ -39,25 +40,54 @@ const Dashboard = () => {
     loadInitialData();
   }, []);
 
-  // Time tracking
+  // Time tracking - improved with more frequent updates and better error handling
   useEffect(() => {
     let interval;
     if (isPlaying && playerRef.current) {
       interval = setInterval(() => {
         try {
-          const current = playerRef.current.getCurrentTime();
-          const total = playerRef.current.getDuration();
-          if (current !== undefined && total !== undefined) {
-            setCurrentTime(current || 0);
-            setDuration(total || 0);
+          if (playerRef.current && typeof playerRef.current.getCurrentTime === 'function') {
+            const current = playerRef.current.getCurrentTime();
+            const total = playerRef.current.getDuration();
+            
+            if (typeof current === 'number' && typeof total === 'number' && !isNaN(current) && !isNaN(total)) {
+              setCurrentTime(current);
+              setDuration(total);
+            }
           }
         } catch (error) {
           console.error('Time tracking error:', error);
         }
-      }, 1000);
+      }, 500); // Update more frequently for smoother progress
     }
-    return () => clearInterval(interval);
+    return () => {
+      if (interval) clearInterval(interval);
+    };
   }, [isPlaying]);
+
+  // Player ready effect - ensure duration is set when player is ready
+  useEffect(() => {
+    if (currentSong && playerRef.current) {
+      const checkDuration = () => {
+        try {
+          if (playerRef.current && typeof playerRef.current.getDuration === 'function') {
+            const total = playerRef.current.getDuration();
+            if (typeof total === 'number' && !isNaN(total) && total > 0) {
+              setDuration(total);
+            }
+          }
+        } catch (error) {
+          console.error('Duration check error:', error);
+        }
+      };
+      
+      // Check duration periodically until it's available
+      const durationInterval = setInterval(checkDuration, 1000);
+      setTimeout(() => clearInterval(durationInterval), 10000); // Stop after 10 seconds
+      
+      return () => clearInterval(durationInterval);
+    }
+  }, [currentSong]);
 
   // Load initial data
   const loadInitialData = async () => {
@@ -76,8 +106,13 @@ const Dashboard = () => {
 
   // Music Control Functions
   const playSong = (song, playlist = []) => {
+    // Reset player state
+    setCurrentTime(0);
+    setDuration(0);
+    setIsPlaying(false);
+    setIsPlayerLoading(true);
+    
     setCurrentSong(song);
-    setIsPlaying(true);
     
     if (playlist.length > 0) {
       setCurrentPlaylist(playlist);
@@ -94,12 +129,14 @@ const Dashboard = () => {
 
   const togglePlayPause = () => {
     if (playerRef.current && currentSong) {
-      if (isPlaying) {
-        playerRef.current.pauseVideo();
-        setIsPlaying(false);
-      } else {
-        playerRef.current.playVideo();
-        setIsPlaying(true);
+      try {
+        if (isPlaying) {
+          playerRef.current.pauseVideo();
+        } else {
+          playerRef.current.playVideo();
+        }
+      } catch (error) {
+        console.error('Play/pause error:', error);
       }
     }
   };
@@ -132,14 +169,18 @@ const Dashboard = () => {
 
   const seekTo = (e) => {
     if (playerRef.current && duration > 0) {
-      const progressBar = progressRef.current;
-      const rect = progressBar.getBoundingClientRect();
-      const clickX = e.clientX - rect.left;
-      const percentage = clickX / rect.width;
-      const newTime = percentage * duration;
-      
-      playerRef.current.seekTo(newTime);
-      setCurrentTime(newTime);
+      try {
+        const progressBar = progressRef.current;
+        const rect = progressBar.getBoundingClientRect();
+        const clickX = e.clientX - rect.left;
+        const percentage = Math.max(0, Math.min(1, clickX / rect.width));
+        const newTime = percentage * duration;
+        
+        playerRef.current.seekTo(newTime, true); // Allow seeking ahead
+        setCurrentTime(newTime);
+      } catch (error) {
+        console.error('Seek error:', error);
+      }
     }
   };
 
@@ -147,7 +188,11 @@ const Dashboard = () => {
     const newVolume = parseFloat(e.target.value);
     setVolume(newVolume);
     if (playerRef.current) {
-      playerRef.current.setVolume(newVolume * 100);
+      try {
+        playerRef.current.setVolume(newVolume * 100);
+      } catch (error) {
+        console.error('Volume change error:', error);
+      }
     }
   };
 
@@ -204,28 +249,96 @@ const Dashboard = () => {
   // YouTube Player Events
   const onPlayerReady = (event) => {
     playerRef.current = event.target;
-    event.target.setVolume(volume * 100);
+    try {
+      event.target.setVolume(volume * 100);
+      setIsPlayerLoading(false);
+      
+      // Auto-play when ready
+      if (currentSong) {
+        setTimeout(() => {
+          try {
+            event.target.playVideo();
+          } catch (error) {
+            console.error('Auto-play error:', error);
+            setIsPlayerLoading(false);
+          }
+        }, 100);
+      }
+    } catch (error) {
+      console.error('Player ready error:', error);
+      setIsPlayerLoading(false);
+    }
   };
 
   const onPlayerStateChange = (event) => {
-    if (event.data === 1) { // Playing
-      setIsPlaying(true);
-    } else if (event.data === 2) { // Paused
-      setIsPlaying(false);
-    } else if (event.data === 0) { // Ended
-      setIsPlaying(false);
-      if (repeatMode === 'one') {
-        playerRef.current.playVideo();
-      } else if (repeatMode === 'all' || currentIndex < currentPlaylist.length - 1) {
-        playNext();
+    try {
+      switch (event.data) {
+        case -1: // Unstarted
+          setIsPlaying(false);
+          setIsPlayerLoading(true);
+          break;
+        case 0: // Ended
+          setIsPlaying(false);
+          setIsPlayerLoading(false);
+          if (repeatMode === 'one') {
+            setTimeout(() => {
+              try {
+                playerRef.current.playVideo();
+              } catch (error) {
+                console.error('Repeat play error:', error);
+              }
+            }, 500);
+          } else if (repeatMode === 'all' || currentIndex < currentPlaylist.length - 1) {
+            setTimeout(() => playNext(), 1000);
+          }
+          break;
+        case 1: // Playing
+          setIsPlaying(true);
+          setIsPlayerLoading(false);
+          break;
+        case 2: // Paused
+          setIsPlaying(false);
+          setIsPlayerLoading(false);
+          break;
+        case 3: // Buffering
+          setIsPlayerLoading(true);
+          break;
+        case 5: // Video cued
+          setIsPlaying(false);
+          setIsPlayerLoading(false);
+          break;
+        default:
+          break;
       }
+    } catch (error) {
+      console.error('Player state change error:', error);
+      setIsPlayerLoading(false);
+    }
+  };
+
+  const onPlayerError = (event) => {
+    console.error('YouTube Player Error:', event.data);
+    setIsPlaying(false);
+    setIsPlayerLoading(false);
+    
+    // Try to skip to next song on error
+    if (currentPlaylist.length > 1) {
+      setTimeout(() => playNext(), 2000);
     }
   };
 
   // Utility Functions
   const formatTime = (time) => {
-    const minutes = Math.floor(time / 60);
+    if (!time || isNaN(time) || time < 0) return '0:00';
+    
+    const hours = Math.floor(time / 3600);
+    const minutes = Math.floor((time % 3600) / 60);
     const seconds = Math.floor(time % 60);
+    
+    if (hours > 0) {
+      return `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+    
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
 
@@ -253,6 +366,10 @@ const Dashboard = () => {
       modestbranding: 1,
       rel: 0,
       showinfo: 0,
+      enablejsapi: 1,
+      origin: window.location.origin,
+      playsinline: 1,
+      start: 0,
     },
   };
 
@@ -492,8 +609,8 @@ const Dashboard = () => {
               <button className="control-btn" onClick={playPrevious}>
                 ⏮️
               </button>
-              <button className="play-pause-btn" onClick={togglePlayPause}>
-                {isPlaying ? '⏸️' : '▶️'}
+              <button className={`play-pause-btn ${isPlayerLoading ? 'loading' : ''}`} onClick={togglePlayPause}>
+                {isPlayerLoading ? '' : (isPlaying ? '⏸️' : '▶️')}
               </button>
               <button className="control-btn" onClick={playNext}>
                 ⏭️
@@ -504,11 +621,18 @@ const Dashboard = () => {
             </div>
             
             <div className="player-progress">
-              <span className="time-current">{formatTime(currentTime)}</span>
+              <span className="time-current">{formatTime(currentTime || 0)}</span>
               <div className="progress-bar" ref={progressRef} onClick={seekTo}>
-                <div className="progress-fill" style={{ width: `${duration > 0 ? (currentTime / duration) * 100 : 0}%` }}></div>
+                <div 
+                  className="progress-fill" 
+                  style={{ 
+                    width: `${duration > 0 && currentTime >= 0 ? Math.min(100, (currentTime / duration) * 100) : 0}%`,
+                    transition: isPlaying ? 'none' : 'width 0.3s ease'
+                  }}
+                ></div>
+                <div className="progress-buffer" style={{ width: '0%' }}></div>
               </div>
-              <span className="time-total">{formatTime(duration)}</span>
+              <span className="time-total">{formatTime(duration || 0)}</span>
             </div>
           </div>
           
@@ -532,10 +656,12 @@ const Dashboard = () => {
       {/* Hidden YouTube Player */}
       {currentSong && (
         <YouTube
+          key={currentSong.id?.videoId} // Force remount for new songs
           videoId={currentSong.id?.videoId}
           opts={playerOptions}
           onReady={onPlayerReady}
           onStateChange={onPlayerStateChange}
+          onError={onPlayerError}
         />
       )}
 
