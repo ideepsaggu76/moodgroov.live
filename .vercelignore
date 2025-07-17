@@ -1,15 +1,15 @@
-# Development files
-src/
-public/
+# Cache and dependency files
 node_modules/
+.vercel/
+coverage/
 
-# Build artifacts
-*.map
-*.log
+# Build artifacts (local builds should not be deployed)
+build/
+
+# Environment files (use Vercel's environment variables instead)
 .env.local
 .env.development.local
 .env.test.local
-.env.production.local
 
 # IDE and editor files
 .vscode/
@@ -22,8 +22,7 @@ node_modules/
 .DS_Store
 Thumbs.db
 
-# Testing
-coverage/
+# Testing files
 *.test.js
 *.spec.js
 
@@ -31,6 +30,12 @@ coverage/
 README.md
 *.md
 
-# Git
+# Git files
 .git/
 .gitignore
+
+# Source maps (disabled in production anyway)
+*.map
+
+# Log files
+*.log
