@@ -1,169 +1,117 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <!-- Google Verification -->
-    <meta name="google-site-verification" content="jiwG56apHhm7DDfAkMbgeJB9GjWI-hRqaB3kAEBPak4" />
-    <link rel="icon" href="%PUBLIC_URL%/_MoodGroovMusicApp.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/_MoodGroovMusicApp.png" />
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+<style>
+  /* Styles for the expandable SEO block */
+  details.seo-details {
+    max-width: 900px;
+    margin: 40px auto 80px auto;
+    padding: 16px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+    font-size: 1.08rem;
+    line-height: 1.6;
+  }
+  details.seo-details summary {
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1.2rem;
+    padding: 8px 0;
+    color: #1d6bf3;
+  }
+</style>
 
-    <title>MoodGroov – Free Mood-Based Audio Streaming App | Mood Groov Music & YouTube Integration</title>
-    <meta name="description" content="MoodGroov.live is a free mood-based audio streaming app. Instantly discover music and playlists for every mood—powered by YouTube & Google APIs. Listen online with no signup. Your best mood music, all in one place. content="MoodGroov, mood groov, moodgroov app, moodgroov live, free music app, mood music, mood playlists, YouTube music, Google music API, streaming, audio app, mood-based streaming, listen free, trending music, music for moods, happy music, sad songs, chill beats, focus playlists, workout playlists, party music, YouTube library, YouTube API, Google, Google Audio, music discovery, new releases, unlimited music, playlist by mood, AI music, vibe playlists, playlist generator, music player, web music, mobile music, Hindi, English, Bollywood, instrumental, lo-fi, EDM, pop, rock, indie, classical, Punjabi, Tamil, Telugu, web player, online audio." />
-" />
-    <meta name="author" content="MoodGroov Team">
-    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-    <meta name="copyright" content="MoodGroov.live">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<details class="seo-details">
+  <summary>About MoodGroov (SEO Content)</summary>
 
-    <!-- Open Graph / Facebook -->
-    <meta property="og:title" content="MoodGroov – Free Mood-Based Audio Streaming App" />
-    <meta property="og:description" content="Stream music for every mood. Free playlists, trending tracks, and YouTube-powered audio. Discover your mood music on MoodGroov.live!" />
-    <meta property="og:image" content="https://www.moodgroov.live/og-moodgroov.jpg" />
-    <meta property="og:url" content="https://www.moodgroov.live/" />
-    <meta property="og:type" content="www.moodgroov.live" />
+  <!-- BEGIN: SEO-Optimized Content Section -->
+  <header>
+    <h1>MoodGroov – Discover Free Mood-Based Audio & YouTube Music Streaming</h1>
+    <nav>
+      <a href="/">Home</a> | 
+      <a href="/about">About</a> | 
+      <a href="/explore">Explore</a> | 
+      <a href="/contact">Contact</a>
+    </nav>
+  </header>
 
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="MoodGroov – Mood-Based Music & Audio Streaming">
-    <meta name="twitter:description" content="Listen to the best mood-based music, powered by YouTube & Google APIs. Unlimited free streaming. Explore MoodGroov now!">
-    <meta name="twitter:image" content="https://www.moodgroov.live/twitter-moodgroov.jpg">
+  <section>
+    <h2>The Ultimate Mood Music App – Powered by YouTube & Google APIs</h2>
+    <p><strong>MoodGroov</strong> is the best place to stream free music and audio tailored to your mood. Instantly discover tracks and playlists for every feeling—happy, sad, energetic, chill, romantic, and more—thanks to our deep integration with <strong>YouTube Music</strong> and <strong>Google APIs</strong>. No signup, no ads, just unlimited music for every mood!</p>
+    <p>With MoodGroov, you get AI-powered recommendations, trending playlists, and new music releases from YouTube’s vast library. Our service uses the YouTube Music API and Google’s advanced search to deliver the best audio experience—right in your browser or mobile device.</p>
+    <p>Whether you want to relax, work out, party, study, or just vibe, MoodGroov.live serves up curated music, lo-fi beats, Bollywood hits, indie gems, and more. All for free, with unlimited skips and no subscription required!</p>
+    <p><a href="/explore" style="background:#1d6bf3;color:#fff;padding:12px 24px;text-decoration:none;border-radius:5px;font-weight:600;">Start Listening Now</a></p>
+  </section>
 
-    <!-- Canonical URL -->
-    <link rel="canonical" href="https://www.moodgroov.live/" />
+  <section id="features">
+    <h2>Why MoodGroov.live</h2>
+    <ul>
+      <li>100% Free, Unlimited Streaming – No signup, no ads, no limits.</li>
+      <li>Powered by YouTube & Google APIs for the widest music selection.</li>
+      <li>Mood-based playlists: Happy, Sad, Energetic, Relax, Romantic, Focus, Party, and more.</li>
+      <li>Access to YouTube Music Library and trending tracks.</li>
+      <li>Personalized AI suggestions for your current mood.</li>
+      <li>Mobile-friendly web player – listen anywhere, anytime.</li>
+      <li>Curated genre playlists: Bollywood, English, pop, rock, lo-fi, EDM, classical, and more.</li>
+      <li>Create, save, and share your own playlists.</li>
+      <li>Discover new artists, trending songs, and exclusive YouTube mixes.</li>
+    </ul>
+  </section>
 
-    <!-- Structured Data for SEO (JSON-LD) -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "MoodGroov",
-      "url": "https://www.moodgroov.live/",
-      "description": "Free mood-based audio streaming app. Listen to the perfect playlist for every mood, powered by YouTube and Google technology"MoodGroov, mood groov, moodgroov app, moodgroov live, free music app, mood music, mood playlists, YouTube music, Google music API, streaming, audio app, mood-based streaming, listen free, trending music, music for moods, happy music, sad songs, chill beats, focus playlists, workout playlists, party music, YouTube library, YouTube API, Google, Google Audio, music discovery, new releases, unlimited music, playlist by mood, AI music, vibe playlists, playlist generator, music player, web music, mobile music, Hindi, English, Bollywood, instrumental, lo-fi, EDM, pop, rock, indie, classical, Punjabi, Tamil, Telugu, web player, online audio, no signup music, unlimited skips, free streaming, mood sound, personalized music, AI playlist, mood tracker, background music, music for you, music for work, music for study, 24/7 music, trending audio, best mood app, Google music streaming, YouTube integration, music web app, best free music, no ads music, mobile music app" />
-.",
-      "sameAs": [
-        "https://www.instagram.com/moodgroov.live",
-        "https://www.facebook.com/moodgroov.live",
-        "https://twitter.com/moodgroov.live"
-      ],
-      "potentialAction": [{
-        "@type": "SearchAction",
-        "target": "https://www.moodgroov.live/search?q={search_term_string}",
-        "query-input": "required name=search_term_string"
-      }]
-    }
-    </script>
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
+  <section id="keywords">
+    <h2>Popular Searches for MoodGroov</h2>
+    <ul style="columns:2;">
+      <li>moodgroov</li>
+      <li>mood groov</li>
+      <li>moodgroov app</li>
+      <li>moodgroov live</li>
+      <li>mood-based music</li>
+      <li>youtube music moodgroov</li>
+      <li>google music app</li>
+      <li>mood playlists</li>
+      <li>free music streaming</li>
+      <li>audio streaming app</li>
+      <li>music by mood</li>
+      <li>playlist by mood</li>
+      <li>happy music</li>
+      <li>sad music</li>
+      <li>chill playlists</li>
+      <li>workout music app</li>
+      <li>no signup music</li>
+      <li>trending music app</li>
+      <li>google audio API</li>
+      <li>youtube api music app</li>
+      <li>personalized playlist generator</li>
+      <li>music for study</li>
+      <li>party music app</li>
+      <li>web music player</li>
+    </ul>
+  </section>
 
-    <!-- BEGIN: SEO-Optimized Content Section (for search engines and users) -->
-    <section id="seo-main-content" style="max-width:900px;margin:40px auto 80px auto;padding:32px 18px;background:#fff;border-radius:12px;box-shadow:0 2px 16px rgba(0,0,0,0.07);font-size:1.08rem;line-height:1.6;">
-      <header>
-        <h1>MoodGroov – Discover Free Mood-Based Audio & YouTube Music Streaming</h1>
-        <nav style="margin-bottom:1.5em;">
-          <a href="/">Home</a> | 
-          <a href="/about">About</a> | 
-          <a href="/explore">Explore</a> | 
-          <a href="/contact">Contact</a>
-        </nav>
-      </header>
-      <section>
-        <h2>The Ultimate Mood Music App – Powered by YouTube & Google APIs</h2>
-        <p>
-          <strong>MoodGroov</strong> is the best place to stream free music and audio tailored to your mood. Instantly discover tracks and playlists for every feeling—happy, sad, energetic, chill, romantic, and more—thanks to our deep integration with <strong>YouTube Music</strong> and <strong>Google APIs</strong>. No signup, no ads, just unlimited music for every mood!
-        </p>
-        <p>
-          With MoodGroov, you get AI-powered recommendations, trending playlists, and new music releases from YouTube’s vast library. Our service uses the YouTube Music API and Google’s advanced search to deliver the best audio experience—right in your browser or mobile device.
-        </p>
-        <p>
-          Whether you want to relax, work out, party, study, or just vibe, MoodGroov.live serves up curated music, lo-fi beats, Bollywood hits, indie gems, and more. All for free, with unlimited skips and no subscription required!
-        </p>
-        <p>
-          <a href="/explore" style="background: #1d6bf3; color: #fff; padding: 12px 24px; text-decoration:none; border-radius:5px;font-weight:600;">Start Listening Now</a>
-        </p>
-      </section>
-      <section id="features">
-        <h2>Why MoodGroov.live</h2>
-        <ul>
-          <li>100% Free, Unlimited Streaming – No signup, no ads, no limits.</li>
-          <li>Powered by YouTube & Google APIs for the widest music selection.</li>
-          <li>Mood-based playlists: Happy, Sad, Energetic, Relax, Romantic, Focus, Party, and more.</li>
-          <li>Access to YouTube Music Library and trending tracks.</li>
-          <li>Personalized AI suggestions for your current mood.</li>
-          <li>Mobile-friendly web player – listen anywhere, anytime.</li>
-          <li>Curated genre playlists: Bollywood, English, pop, rock, lo-fi, EDM, classical, and more.</li>
-          <li>Create, save, and share your own playlists.</li>
-          <li>Discover new artists, trending songs, and exclusive YouTube mixes.</li>
-        </ul>
-      </section>
-      <section id="keywords">
-        <h2>Popular Searches for MoodGroov</h2>
-        <ul style="columns:2;">
-          <li>moodgroov</li>
-          <li>mood groov</li>
-          <li>moodgroov app</li>
-          <li>moodgroov live</li>
-          <li>mood-based music</li>
-          <li>youtube music moodgroov</li>
-          <li>google music app</li>
-          <li>mood playlists</li>
-          <li>free music streaming</li>
-          <li>audio streaming app</li>
-          <li>music by mood</li>
-          <li>playlist by mood</li>
-          <li>happy music</li>
-          <li>sad music</li>
-          <li>chill playlists</li>
-          <li>workout music app</li>
-          <li>no signup music</li>
-          <li>trending music app</li>
-          <li>google audio API</li>
-          <li>youtube api music app</li>
-          <li>personalized playlist generator</li>
-          <li>music for study</li>
-          <li>party music app</li>
-          <li>web music player</li>
-        </ul>
-      </section>
-      <section id="testimonials">
-        <h2>User Reviews</h2>
-        <blockquote>
-          “MoodGroov lets me find the perfect YouTube playlist for my mood—no ads, no signup. Amazing!”<br>
-          <cite>– Neha, Music Lover</cite>
-        </blockquote>
-        <blockquote>
-          “I love that MoodGroov is powered by Google and YouTube APIs. I always get trending tracks and new releases, instantly.”<br>
-          <cite>– Rajat, Student</cite>
-        </blockquote>
-      </section>
-      <section id="faq">
-        <h2>Frequently Asked Questions</h2>
-        <h3>Is MoodGroov really free?</h3>
-        <p>Yes! MoodGroov offers unlimited streaming with no signup, no ads, and no payment required.</p>
-        <h3>How does MoodGroov use YouTube and Google?</h3>
-        <p>MoodGroov uses official YouTube and Google APIs to provide access to the latest music, trending playlists, and artist content directly from YouTube Music Library.</p>
-        <h3>Do I need an account to listen?</h3>
-        <p>No – just pick your mood and start listening instantly.</p>
-        <h3>Can I use MoodGroov on mobile?</h3>
-        <p>Absolutely! MoodGroov is fully responsive and works on any device, anywhere.</p>
-        <h3>What music genres are available?</h3>
-        <p>We offer pop, rock, indie, Bollywood, hiphop, lo-fi, classical, electronic, and much more—powered by YouTube Music and Google Audio APIs.</p>
-        <h3>How do I contact MoodGroov?</h3>
-        <p>Use our <a href="/contact">contact form</a> or email <a href="mailto:support@moodgroov.live">support@moodgroov.live</a>.</p>
-      </section>
-      <footer style="margin-top:2em;">
-        <p>
-          &copy; 2025 MoodGroov.live | <a href="/">Home</a> | <a href="/about">About</a> | <a href="/explore">Explore</a> | <a href="/privacy">Privacy Policy</a>
-        </p>
-        <p>
-          <a rel="noopener" href="https://twitter.com/intent/tweet?text=Check%20out%20MoodGroov%20for%20free%20mood-based%20music%20streaming!%20https%3A%2F%2Fwww.moodgroov.live" target="_blank">Share on Twitter</a>
-        </p>
-      </footer>
-    </section>
+  <section id="testimonials">
+    <h2>User Reviews</h2>
+    <blockquote>“MoodGroov lets me find the perfect YouTube playlist for my mood—no ads, no signup. Amazing!”<br><cite>– Neha, Music Lover</cite></blockquote>
+    <blockquote>“I love that MoodGroov is powered by Google and YouTube APIs. I always get trending tracks and new releases, instantly.”<br><cite>– Rajat, Student</cite></blockquote>
+  </section>
 
-  </body>
-</html>
+  <section id="faq">
+    <h2>Frequently Asked Questions</h2>
+    <h3>Is MoodGroov really free?</h3>
+    <p>Yes! MoodGroov offers unlimited streaming with no signup, no ads, and no payment required.</p>
+    <h3>How does MoodGroov use YouTube and Google?</h3>
+    <p>MoodGroov uses official YouTube and Google APIs to provide access to the latest music, trending playlists, and artist content directly from YouTube Music Library.</p>
+    <h3>Do I need an account to listen?</h3>
+    <p>No – just pick your mood and start listening instantly.</p>
+    <h3>Can I use MoodGroov on mobile?</h3>
+    <p>Absolutely! MoodGroov is fully responsive and works on any device, anywhere.</p>
+    <h3>What music genres are available?</h3>
+    <p>We offer pop, rock, indie, Bollywood, hiphop, lo-fi, classical, electronic, and much more—powered by YouTube Music and Google Audio APIs.</p>
+    <h3>How do I contact MoodGroov?</h3>
+    <p>Use our <a href="/contact">contact form</a> or email <a href="mailto:support@moodgroov.live">support@moodgroov.live</a>.</p>
+  </section>
+
+  <footer style="margin-top:2em;">
+    <p>&copy; 2025 MoodGroov.live | <a href="/">Home</a> | <a href="/about">About</a> | <a href="/explore">Explore</a> | <a href="/privacy">Privacy Policy</a></p>
+    <p><a rel="noopener" href="https://twitter.com/intent/tweet?text=Check%20out%20MoodGroov%20for%20free%20mood-based%20music%20streaming!%20https%3A%2F%2Fwww.moodgroov.live" target="_blank">Share on Twitter</a></p>
+  </footer>
+  <!-- END: SEO-Optimized Content Section -->
+
+</details>
